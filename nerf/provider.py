@@ -172,8 +172,13 @@ class NeRFDataset:
             
             self.poses = []
             self.images = []
+            self.masks = []
             for f in tqdm.tqdm(frames, desc=f'Loading {type} data:'):
                 f_path = os.path.join(self.root_path, f['file_path'])
+                mask_path = os.path.join(
+                    os.path.dirname(f_path),
+                   "dynamic_mask_" + os.path.basename(f_path)#.replace(".JPG", ".png").replace(".jpg", ".png")
+                )
                 if self.mode == 'blender':
                     f_path += '.png' # so silly...
 
@@ -185,6 +190,7 @@ class NeRFDataset:
                 pose = nerf_matrix_to_ngp(pose, scale=self.scale)
 
                 image = cv2.imread(f_path, cv2.IMREAD_UNCHANGED) # [H, W, 3] o [H, W, 4]
+
                 if self.H is None or self.W is None:
                     self.H = image.shape[0] // downscale
                     self.W = image.shape[1] // downscale
@@ -198,12 +204,24 @@ class NeRFDataset:
                 image = cv2.resize(image, (self.W, self.H), interpolation=cv2.INTER_AREA)
                 image = image.astype(np.float32) / 255 # [H, W, 3/4]
 
+                # load mask data
+                if not os.path.exists(mask_path):
+                    mask = np.zeros(image.shape[:2]).astype(np.float32)
+                else:
+                   mask = 1 - (cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255)
+
+                mask = cv2.resize(mask, (self.W, self.H), interpolation=cv2.INTER_NEAREST)
+
                 self.poses.append(pose)
                 self.images.append(image)
+                self.masks.append(mask)
             
         self.poses = torch.from_numpy(np.stack(self.poses, axis=0)) # [N, 4, 4]
         if self.images is not None:
             self.images = torch.from_numpy(np.stack(self.images, axis=0)) # [N, H, W, C]
+
+        if self.masks is not None:
+            self.masks = torch.from_numpy(np.stack(self.masks, axis=0)) # [N, H, W]
         
         # calculate mean radius of all camera poses
         self.radius = self.poses[:, :3, 3].norm(dim=-1).mean(0).item()
@@ -225,6 +243,8 @@ class NeRFDataset:
             self.poses = self.poses.to(self.device)
             if self.images is not None:
                 self.images = self.images.to(torch.half if self.fp16 else torch.float).to(self.device)
+            if self.masks is not None:
+                self.masks = self.masks.to(torch.half if self.fp16 else torch.float).to(self.device)
             if self.error_map is not None:
                 self.error_map = self.error_map.to(self.device)
 
@@ -287,6 +307,12 @@ class NeRFDataset:
                 C = images.shape[-1]
                 images = torch.gather(images.view(B, -1, C), 1, torch.stack(C * [rays['inds']], -1)) # [B, N, 3/4]
             results['images'] = images
+
+        if self.masks is not None:
+            masks = self.masks[index].to(self.device) # [ B, H, W]
+            if self.training:
+                masks =  torch.gather(masks.view(B, -1), 1, rays['inds']) # [B, N]
+            results['masks'] = masks
         
         # need inds to update error_map
         if error_map is not None:

@@ -122,13 +122,13 @@ if __name__ == '__main__':
             gui.render()
         
         else:
-            train_loader = NeRFDataset(opt, device=device, type='train').dataloader()
-            valid_loader = NeRFDataset(opt, device=device, type='val', downscale=2).dataloader()
+            train_loader = NeRFDataset(opt, device=device, type='train', downscale=4).dataloader()
+            valid_loader = NeRFDataset(opt, device=device, type='val', downscale=4).dataloader()
 
             trainer.train(train_loader, valid_loader, 300)
 
             # also test
-            test_loader = NeRFDataset(opt, device=device, type='test').dataloader()
+            test_loader = NeRFDataset(opt, device=device, type='test', downscale=4).dataloader()
             
             if opt.mode == 'blender':
                 trainer.evaluate(test_loader) # blender has gt, so evaluate it.
