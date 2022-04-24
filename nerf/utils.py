@@ -385,7 +385,6 @@ class Trainer(object):
             return pred_rgb, None, loss
 
         images = data['images'] # [B, N, 3/4]
-        masks = data['masks'] # [B, N]
 
         B, N, C = images.shape
     
@@ -404,8 +403,10 @@ class Trainer(object):
     
         pred_rgb = outputs['image']
 
-        gt_rgb *= masks[...,None]
-        pred_rgb *= masks[...,None]
+        if self.opt.masked:
+            masks = data['masks'] # [B, N]
+            gt_rgb *= masks[...,None]
+            pred_rgb *= masks[...,None]
 
         loss = self.criterion(pred_rgb, gt_rgb).mean(-1) # [B, N, 3] --> [B, N]
 

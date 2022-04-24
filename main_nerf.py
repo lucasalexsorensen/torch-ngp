@@ -1,3 +1,4 @@
+import shutil
 import torch
 import argparse
 
@@ -14,6 +15,7 @@ if __name__ == '__main__':
     parser.add_argument('-O', action='store_true', help="equals --fp16 --cuda_ray --preload")
     parser.add_argument('--test', action='store_true', help="test mode")
     parser.add_argument('--workspace', type=str, default='workspace')
+    parser.add_argument('--rm', action='store_true', help="delete workspace before starting")
     parser.add_argument('--seed', type=int, default=0)
 
     ### training options
@@ -24,6 +26,8 @@ if __name__ == '__main__':
     parser.add_argument('--num_steps', type=int, default=512, help="num steps sampled per ray (only valid when not using --cuda_ray)")
     parser.add_argument('--upsample_steps', type=int, default=0, help="num steps up-sampled per ray (only valid when not using --cuda_ray)")
     parser.add_argument('--max_ray_batch', type=int, default=4096, help="batch size of rays at inference to avoid OOM (only valid when not using --cuda_ray)")
+    parser.add_argument('--masked', action='store_true', help="use image masks")
+
 
     ### network backbone options
     parser.add_argument('--fp16', action='store_true', help="use amp mixed precision training")
@@ -52,6 +56,10 @@ if __name__ == '__main__':
     parser.add_argument('--rand_pose', type=int, default=-1, help="<0 uses no rand pose, =0 only uses rand pose, >0 sample one rand pose every $ known poses")
 
     opt = parser.parse_args()
+
+    if opt.rm and opt.workspace:
+        if os.path.exists(opt.workspace):
+            shutil.rmtree(opt.workspace)
 
     if opt.O:
         opt.fp16 = True

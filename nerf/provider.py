@@ -106,6 +106,8 @@ class NeRFDataset:
 
         self.rand_pose = opt.rand_pose
 
+        self.masks = None
+
         # load nerf-compatible format data.
         if self.mode == 'colmap':
             with open(os.path.join(self.root_path, 'transforms.json'), 'r') as f:
@@ -172,7 +174,8 @@ class NeRFDataset:
             
             self.poses = []
             self.images = []
-            self.masks = []
+            if self.opt.masked:
+                self.masks = []
             for f in tqdm.tqdm(frames, desc=f'Loading {type} data:'):
                 f_path = os.path.join(self.root_path, f['file_path'])
                 mask_path = os.path.join(
@@ -205,16 +208,17 @@ class NeRFDataset:
                 image = image.astype(np.float32) / 255 # [H, W, 3/4]
 
                 # load mask data
-                if not os.path.exists(mask_path):
-                    mask = np.zeros(image.shape[:2]).astype(np.float32)
-                else:
-                   mask = 1 - (cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255)
+                if self.opt.masked:
+                    if not os.path.exists(mask_path):
+                        mask = np.zeros(image.shape[:2]).astype(np.float32)
+                    else:
+                        mask = 1 - (cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255)
 
-                mask = cv2.resize(mask, (self.W, self.H), interpolation=cv2.INTER_NEAREST)
+                    mask = cv2.resize(mask, (self.W, self.H), interpolation=cv2.INTER_NEAREST)
+                    self.masks.append(mask)
 
                 self.poses.append(pose)
                 self.images.append(image)
-                self.masks.append(mask)
             
         self.poses = torch.from_numpy(np.stack(self.poses, axis=0)) # [N, 4, 4]
         if self.images is not None:
