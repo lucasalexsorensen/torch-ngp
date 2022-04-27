@@ -1,4 +1,4 @@
-[INFO] Trainer: ngp | 2022-04-24_11-30-03 | cuda | fp16 | room-masked
+[INFO] Trainer: ngp | 2022-04-26_10-43-51 | cuda | fp16 | room-masked
 [INFO] #parameters: 12610160
 [INFO] Loading latest checkpoint ...
 [WARN] No checkpoint found, model randomly initialized.
@@ -103,9 +103,9 @@
 ==> Start Training Epoch 50, lr=0.010000 ...
 ==> Finished Epoch 50.
 ++> Evaluate at epoch 50 ...
-PSNR = 19.918282
+PSNR = 20.093517
 ++> Evaluate epoch 50 Finished.
-[INFO] New best result: None --> 0.010189948603510857
+[INFO] New best result: None --> 0.009786974638700485
 ==> Start Training Epoch 51, lr=0.010000 ...
 ==> Finished Epoch 51.
 ==> Start Training Epoch 52, lr=0.010000 ...
@@ -207,9 +207,9 @@ PSNR = 19.918282
 ==> Start Training Epoch 100, lr=0.010000 ...
 ==> Finished Epoch 100.
 ++> Evaluate at epoch 100 ...
-PSNR = 20.264387
+PSNR = 20.369356
 ++> Evaluate epoch 100 Finished.
-[INFO] New best result: 0.010189948603510857 --> 0.009409387595951557
+[INFO] New best result: 0.009786974638700485 --> 0.00918468739837408
 ==> Start Training Epoch 101, lr=0.003300 ...
 ==> Finished Epoch 101.
 ==> Start Training Epoch 102, lr=0.003300 ...
@@ -311,9 +311,9 @@ PSNR = 20.264387
 ==> Start Training Epoch 150, lr=0.003300 ...
 ==> Finished Epoch 150.
 ++> Evaluate at epoch 150 ...
-PSNR = 20.332131
+PSNR = 20.396652
 ++> Evaluate epoch 150 Finished.
-[INFO] New best result: 0.009409387595951557 --> 0.009263751097023487
+[INFO] New best result: 0.00918468739837408 --> 0.009127140045166016
 ==> Start Training Epoch 151, lr=0.003300 ...
 ==> Finished Epoch 151.
 ==> Start Training Epoch 152, lr=0.003300 ...
@@ -415,9 +415,8 @@ PSNR = 20.332131
 ==> Start Training Epoch 200, lr=0.003300 ...
 ==> Finished Epoch 200.
 ++> Evaluate at epoch 200 ...
-PSNR = 20.367253
+PSNR = 20.395124
 ++> Evaluate epoch 200 Finished.
-[INFO] New best result: 0.009263751097023487 --> 0.009189131669700146
 ==> Start Training Epoch 201, lr=0.001089 ...
 ==> Finished Epoch 201.
 ==> Start Training Epoch 202, lr=0.001089 ...
@@ -519,9 +518,9 @@ PSNR = 20.367253
 ==> Start Training Epoch 250, lr=0.001089 ...
 ==> Finished Epoch 250.
 ++> Evaluate at epoch 250 ...
-PSNR = 20.389490
+PSNR = 20.408375
 ++> Evaluate epoch 250 Finished.
-[INFO] New best result: 0.009189131669700146 --> 0.009142212569713593
+[INFO] New best result: 0.009127140045166016 --> 0.00910253543406725
 ==> Start Training Epoch 251, lr=0.001089 ...
 ==> Finished Epoch 251.
 ==> Start Training Epoch 252, lr=0.001089 ...
@@ -623,10 +622,9 @@ PSNR = 20.389490
 ==> Start Training Epoch 300, lr=0.001089 ...
 ==> Finished Epoch 300.
 ++> Evaluate at epoch 300 ...
-PSNR = 20.392628
+PSNR = 20.404391
 ++> Evaluate epoch 300 Finished.
-[INFO] New best result: 0.009142212569713593 --> 0.009135596454143524
-==> Start Test, save results to room-masked\results
+==> Start Test, save results to room-masked/results
 ==> Finished Test.
-==> Saving mesh to room-masked\meshes\ngp_300.ply
+==> Saving mesh to room-masked/meshes/ngp_300.ply
 ==> Finished saving mesh.

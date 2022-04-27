@@ -12,4 +12,19 @@ void composite_rays_train_backward(at::Tensor grad_weights_sum, at::Tensor grad_
 
 void march_rays(const uint32_t n_alive, const uint32_t n_step, at::Tensor rays_alive, at::Tensor rays_t, at::Tensor rays_o, at::Tensor rays_d, const float bound, const float dt_gamma, const uint32_t C, const uint32_t H, at::Tensor density_grid, const float mean_density, at::Tensor nears, at::Tensor fars, at::Tensor xyzs, at::Tensor dirs, at::Tensor deltas, const uint32_t perturb);
 void composite_rays(const uint32_t n_alive, const uint32_t n_step, at::Tensor rays_alive, at::Tensor rays_t, at::Tensor sigmas, at::Tensor rgbs, at::Tensor deltas, at::Tensor weights_sum, at::Tensor depth, at::Tensor image);
+void composite_rays_disentangle(
+    const uint32_t n_alive,
+    const uint32_t n_step,
+    at::Tensor rays_alive,
+    at::Tensor rays_t,
+    at::Tensor sigmas_full,
+    at::Tensor sigmas_bg,
+    at::Tensor rgbs_full,
+    at::Tensor rgbs_bg,
+    at::Tensor deltas,
+    at::Tensor weights_sum_full,
+    at::Tensor weights_sum_bg,
+    at::Tensor depth,
+    at::Tensor image
+);
 void compact_rays(const uint32_t n_alive, at::Tensor rays_alive, at::Tensor rays_alive_old, at::Tensor rays_t, at::Tensor rays_t_old, at::Tensor alive_counter);

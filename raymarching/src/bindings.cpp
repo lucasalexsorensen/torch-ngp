@@ -12,5 +12,6 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
     // infer
     m.def("march_rays", &march_rays, "march rays (CUDA)");
     m.def("composite_rays", &composite_rays, "composite rays (CUDA)");
+    m.def("composite_rays_disentangle", &composite_rays_disentangle, "composite disentangled rays (CUDA)");
     m.def("compact_rays", &compact_rays, "compact rays (CUDA)");
 }

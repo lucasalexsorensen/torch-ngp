@@ -10,12 +10,13 @@
             "request": "launch",
             "program": "main_nerf.py",
             "args": [
-                "C:\\chkd\\instant-ngp\\data\\nerf\\room",
-                "--workspace",
-                "trial_nerf",
-                "--fp16",
-                "--tcnn",
-                "--cuda_ray"
+                "data/room",
+                "--full",
+                "room-unmasked",
+                "--bg",
+                "room-masked",
+                "-O",
+                "--tcnn"
             ],
             "console": "integratedTerminal",
             "justMyCode": true

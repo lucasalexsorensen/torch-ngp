@@ -1,17 +1,4 @@
-[INFO] Trainer: ngp | 2022-04-24_10-57-00 | cuda | fp16 | room-unmasked
-[INFO] #parameters: 12610160
-[INFO] Loading latest checkpoint ...
-[WARN] No checkpoint found, model randomly initialized.
-[INFO] Trainer: ngp | 2022-04-24_10-57-16 | cuda | fp16 | room-unmasked
-[INFO] #parameters: 12610160
-[INFO] Loading latest checkpoint ...
-[WARN] No checkpoint found, model randomly initialized.
-[INFO] Trainer: ngp | 2022-04-24_10-57-58 | cuda | fp16 | room-unmasked
-[INFO] #parameters: 12610160
-[INFO] Loading latest checkpoint ...
-[WARN] No checkpoint found, model randomly initialized.
-==> Start Training Epoch 1, lr=0.010000 ...
-[INFO] Trainer: ngp | 2022-04-24_10-59-48 | cuda | fp16 | room-unmasked
+[INFO] Trainer: ngp | 2022-04-26_10-37-59 | cuda | fp16 | room-unmasked
 [INFO] #parameters: 12610160
 [INFO] Loading latest checkpoint ...
 [WARN] No checkpoint found, model randomly initialized.
@@ -116,41 +103,9 @@
 ==> Start Training Epoch 50, lr=0.010000 ...
 ==> Finished Epoch 50.
 ++> Evaluate at epoch 50 ...
-PSNR = 26.772106
+PSNR = 26.908407
 ++> Evaluate epoch 50 Finished.
-[INFO] New best result: None --> 0.002102757804095745
-[INFO] Trainer: ngp | 2022-04-24_11-05-51 | cuda | fp16 | room-unmasked
-[INFO] #parameters: 12610160
-[INFO] Loading latest checkpoint ...
-[INFO] Latest checkpoint is room-unmasked\checkpoints\ngp_ep0050.pth.tar
-[INFO] loaded model.
-[INFO] loaded optimizer.
-[INFO] loaded scheduler.
-[INFO] loaded scaler.
-==> Start Training Epoch 50, lr=0.010000 ...
-==> Finished Epoch 50.
-++> Evaluate at epoch 50 ...
-PSNR = 26.808131
-++> Evaluate epoch 50 Finished.
-[INFO] New best result: None --> 0.002085386775434017
-==> Start Test, save results to room-unmasked\results
-==> Finished Test.
-==> Saving mesh to room-unmasked\meshes\ngp_50.ply
-==> Finished saving mesh.
-[INFO] Trainer: ngp | 2022-04-24_11-21-36 | cuda | fp16 | room-unmasked
-[INFO] #parameters: 12610160
-[INFO] Loading latest checkpoint ...
-[INFO] Latest checkpoint is room-unmasked\checkpoints\ngp_ep0050.pth.tar
-[INFO] loaded model.
-[INFO] loaded optimizer.
-[INFO] loaded scheduler.
-[INFO] loaded scaler.
-==> Start Training Epoch 50, lr=0.010000 ...
-==> Finished Epoch 50.
-++> Evaluate at epoch 50 ...
-PSNR = 26.751630
-++> Evaluate epoch 50 Finished.
-[INFO] New best result: None --> 0.0021126954816281796
+[INFO] New best result: None --> 0.0020377887412905693
 ==> Start Training Epoch 51, lr=0.010000 ...
 ==> Finished Epoch 51.
 ==> Start Training Epoch 52, lr=0.010000 ...
@@ -247,14 +202,14 @@ PSNR = 26.751630
 ==> Finished Epoch 97.
 ==> Start Training Epoch 98, lr=0.010000 ...
 ==> Finished Epoch 98.
-==> Start Training Epoch 99, lr=0.003300 ...
+==> Start Training Epoch 99, lr=0.010000 ...
 ==> Finished Epoch 99.
-==> Start Training Epoch 100, lr=0.003300 ...
+==> Start Training Epoch 100, lr=0.010000 ...
 ==> Finished Epoch 100.
 ++> Evaluate at epoch 100 ...
-PSNR = 27.822924
+PSNR = 27.927902
 ++> Evaluate epoch 100 Finished.
-[INFO] New best result: 0.0021126954816281796 --> 0.0016508495900779963
+[INFO] New best result: 0.0020377887412905693 --> 0.0016114243771880865
 ==> Start Training Epoch 101, lr=0.003300 ...
 ==> Finished Epoch 101.
 ==> Start Training Epoch 102, lr=0.003300 ...
@@ -356,9 +311,9 @@ PSNR = 27.822924
 ==> Start Training Epoch 150, lr=0.003300 ...
 ==> Finished Epoch 150.
 ++> Evaluate at epoch 150 ...
-PSNR = 28.200033
+PSNR = 28.341768
 ++> Evaluate epoch 150 Finished.
-[INFO] New best result: 0.0016508495900779963 --> 0.0015135504072532058
+[INFO] New best result: 0.0016114243771880865 --> 0.0014649510849267244
 ==> Start Training Epoch 151, lr=0.003300 ...
 ==> Finished Epoch 151.
 ==> Start Training Epoch 152, lr=0.003300 ...
@@ -455,14 +410,14 @@ PSNR = 28.200033
 ==> Finished Epoch 197.
 ==> Start Training Epoch 198, lr=0.003300 ...
 ==> Finished Epoch 198.
-==> Start Training Epoch 199, lr=0.001089 ...
+==> Start Training Epoch 199, lr=0.003300 ...
 ==> Finished Epoch 199.
-==> Start Training Epoch 200, lr=0.001089 ...
+==> Start Training Epoch 200, lr=0.003300 ...
 ==> Finished Epoch 200.
 ++> Evaluate at epoch 200 ...
-PSNR = 28.402872
+PSNR = 28.584733
 ++> Evaluate epoch 200 Finished.
-[INFO] New best result: 0.0015135504072532058 --> 0.001444484107196331
+[INFO] New best result: 0.0014649510849267244 --> 0.0013852455886080861
 ==> Start Training Epoch 201, lr=0.001089 ...
 ==> Finished Epoch 201.
 ==> Start Training Epoch 202, lr=0.001089 ...
@@ -564,9 +519,9 @@ PSNR = 28.402872
 ==> Start Training Epoch 250, lr=0.001089 ...
 ==> Finished Epoch 250.
 ++> Evaluate at epoch 250 ...
-PSNR = 28.547518
+PSNR = 28.671405
 ++> Evaluate epoch 250 Finished.
-[INFO] New best result: 0.001444484107196331 --> 0.0013971667503938079
+[INFO] New best result: 0.0013852455886080861 --> 0.0013578746002167463
 ==> Start Training Epoch 251, lr=0.001089 ...
 ==> Finished Epoch 251.
 ==> Start Training Epoch 252, lr=0.001089 ...
@@ -668,10 +623,10 @@ PSNR = 28.547518
 ==> Start Training Epoch 300, lr=0.001089 ...
 ==> Finished Epoch 300.
 ++> Evaluate at epoch 300 ...
-PSNR = 28.612809
+PSNR = 28.719432
 ++> Evaluate epoch 300 Finished.
-[INFO] New best result: 0.0013971667503938079 --> 0.001376318046823144
-==> Start Test, save results to room-unmasked\results
+[INFO] New best result: 0.0013578746002167463 --> 0.001342940260656178
+==> Start Test, save results to room-unmasked/results
 ==> Finished Test.
-==> Saving mesh to room-unmasked\meshes\ngp_300.ply
+==> Saving mesh to room-unmasked/meshes/ngp_300.ply
 ==> Finished saving mesh.

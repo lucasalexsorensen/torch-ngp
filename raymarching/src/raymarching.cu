@@ -737,6 +737,141 @@ void composite_rays(const uint32_t n_alive, const uint32_t n_step, at::Tensor ra
     }));
 }
 
+template <typename scalar_t>
+__global__ void kernel_composite_rays_disentangle(
+    const uint32_t n_alive, 
+    const uint32_t n_step, 
+    const int* __restrict__ rays_alive, 
+    scalar_t* rays_t, 
+    const scalar_t* __restrict__ sigmas_full,
+    const scalar_t* __restrict__ sigmas_bg,
+    const scalar_t* __restrict__ rgbs_full, 
+    const scalar_t* __restrict__ rgbs_bg,
+    const scalar_t* __restrict__ deltas, 
+    scalar_t* weights_sum_full,
+    scalar_t* weights_sum_bg,
+    scalar_t* depth,
+    scalar_t* image
+) {
+    const uint32_t n = threadIdx.x + blockIdx.x * blockDim.x;
+    if (n >= n_alive) return;
+
+    const int index = rays_alive[n]; // ray id
+    scalar_t t = rays_t[n]; // current ray's t
+
+    // locate 
+    sigmas_full += n * n_step;
+    rgbs_full += n * n_step * 3;
+    // sigmas_bg += n * n_step;
+    // rgbs_bg += n * n_step * 3;
+    deltas += n * n_step * 2;
+
+    weights_sum_full += index;
+    weights_sum_bg += index;
+    depth += index;
+    image += index * 3;
+    
+    scalar_t weight_sum_full = weights_sum_full[0];
+    scalar_t weight_sum_bg = weights_sum_bg[0];
+    scalar_t d = depth[0];
+    scalar_t r = image[0];
+    scalar_t g = image[1];
+    scalar_t b = image[2];
+
+    // accumulate 
+    uint32_t step = 0;
+    while (step < n_step) {
+        // ray is terminated if delta == 0
+        if (deltas[0] == 0) break;
+        
+        const scalar_t alpha_full = 1.0f - __expf(- sigmas_full[0] * deltas[0]);
+        const scalar_t T_full = 1 - weight_sum_full;
+
+        const scalar_t alpha_bg = 1.0f - __expf(- sigmas_bg[0] * deltas[0]);
+        const scalar_t T_bg = 1 - weight_sum_bg;
+
+        const scalar_t weight_full = alpha_full * T_full;
+        weight_sum_full += weight_full;
+
+        const scalar_t weight_bg = alpha_bg * T_bg;
+        weight_sum_bg += weight_bg;
+
+        const scalar_t weight_fg = weight_full - weight_bg;
+
+        t += deltas[1]; // real delta
+        d += weight_fg * t;
+        r += weight_fg * (rgbs_full[0] - rgbs_bg[0]);
+        g += weight_fg * (rgbs_full[1] - rgbs_bg[1]);
+        b += weight_fg * (rgbs_full[2] - rgbs_bg[2]);
+
+        //printf("[n=%d] num_steps=%d, alpha=%f, w=%f, T=%f, sum_dt=%f, d=%f\n", n, step, alpha, weight, T, sum_delta, d);
+
+        // ray is terminated if T is too small
+        if (T_full < 1e-4) break;
+
+        // locate
+        sigmas_full++;
+        sigmas_bg++;
+        rgbs_full += 3;
+        rgbs_bg += 3;
+        deltas += 2;
+        step++;
+    }
+
+    //printf("[n=%d] rgb=(%f, %f, %f), d=%f\n", n, r, g, b, d);
+
+    // rays_t = -1 means ray is terminated early.
+    if (step < n_step) {
+        rays_t[n] = -1;
+    } else {
+        rays_t[n] = t;
+    }
+
+    weights_sum_full[0] = weight_sum_full; // this is the thing I needed!
+    weights_sum_bg[0] = weight_sum_bg; // this is the thing I needed!
+    depth[0] = d;
+    image[0] = r;
+    image[1] = g;
+    image[2] = b;
+}
+
+
+void composite_rays_disentangle(
+    const uint32_t n_alive,
+    const uint32_t n_step,
+    at::Tensor rays_alive,
+    at::Tensor rays_t,
+    at::Tensor sigmas_full,
+    at::Tensor rgbs_full,
+    at::Tensor sigmas_bg,
+    at::Tensor rgbs_bg,
+    at::Tensor deltas,
+    at::Tensor weights_bg,
+    at::Tensor weights_full,
+    at::Tensor depth,
+    at::Tensor image
+) {
+    static constexpr uint32_t N_THREAD = 256;
+    AT_DISPATCH_FLOATING_TYPES_AND_HALF(
+    image.scalar_type(), "composite_rays_disentangle", ([&] {
+        kernel_composite_rays_disentangle<<<div_round_up(n_alive, N_THREAD), N_THREAD>>>(
+            n_alive,
+            n_step,
+            rays_alive.data_ptr<int>(),
+            rays_t.data_ptr<scalar_t>(),
+            sigmas_full.data_ptr<scalar_t>(),
+            sigmas_bg.data_ptr<scalar_t>(),
+            rgbs_full.data_ptr<scalar_t>(),
+            rgbs_bg.data_ptr<scalar_t>(),
+            deltas.data_ptr<scalar_t>(),
+            weights_full.data_ptr<scalar_t>(),
+            weights_bg.data_ptr<scalar_t>(),
+            depth.data_ptr<scalar_t>(),
+            image.data_ptr<scalar_t>()
+        );
+    }));
+}
+
 
 template <typename scalar_t>
 __global__ void kernel_compact_rays(
